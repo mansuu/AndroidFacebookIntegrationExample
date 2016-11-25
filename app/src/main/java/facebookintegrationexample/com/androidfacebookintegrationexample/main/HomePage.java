@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -37,8 +38,15 @@ import facebookintegrationexample.com.androidfacebookintegrationexample.utils.My
 
 public class HomePage extends AppCompatActivity {
 
-     @BindView(R.id.btn_share_on_facebook)
-    AppCompatButton btn_share;
+     @BindView(R.id.txt_name)
+     TextView txt_name;
+    @BindView(R.id.txt_gender)
+    TextView txt_gender;
+    @BindView(R.id.txt_dob)
+    TextView txt_dob;
+    @BindView(R.id.txt_friends)
+    TextView txt_friends;
+
      @BindView(R.id.img_profile_picture)
     ImageView img_profile_picture;
     private Context context;
@@ -61,7 +69,7 @@ public class HomePage extends AppCompatActivity {
 
                         Log.e("response",object+"");
                      user=new UserFaseBookDataParser().parse(object);
-                        loadProfilePicture(user.getProfilePictureUrl());
+                        setProfile();
 
 
                     }
@@ -73,19 +81,7 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_share_on_facebook) public void shareOnFacebook(){
-        Bitmap image = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.messenger_bubble_small_blue);
 
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(image)
-                .build();
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();
-        ShareDialog shareDialog = new ShareDialog(this);
-        shareDialog.show(content);
-    }
 private void loadProfilePicture(final String url){
     new AsyncTask<Void, Bitmap, Bitmap>() {
         @Override
@@ -102,5 +98,12 @@ private void loadProfilePicture(final String url){
     }
     }.execute();
 }
+
+    private void setProfile(){
+        txt_name.setText(user.getName());
+        txt_gender.setText(user.getGender());
+        txt_dob.setText(user.getDateOfBirth());
+        txt_friends.setText(user.getNumberOfFriends());
+    }
 
 }
